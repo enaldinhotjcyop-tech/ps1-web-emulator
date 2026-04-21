@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>PS1 Web Netflix</title>
+
+<style>
+body {
+    background: #111;
+    color: white;
+    font-family: Arial;
+}
+
+h1 {
+    text-align: center;
+}
+
+#library {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.game {
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.game img {
+    width: 150px;
+    border-radius: 10px;
+}
+
+.game:hover {
+    transform: scale(1.1);
+}
+
+#player {
+    margin-top: 20px;
+    text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎮 Minha Biblioteca PS1</h1>
+
+<div id="library"></div>
+
+<div id="player"></div>
+
+<script src="emulator.js"></script>
+<script src="https://www.emulatorjs.com/loader.js"></script>
+
+</body>
+</html>
