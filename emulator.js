@@ -1,51 +1,74 @@
-const games = [
-    {
-        name: "Crash Bandicoot",
-        file: "data/crash.bin",
-        cover: "covers/crash.jpg"
-    },
-    {
-        name: "Tekken 3",
-        file: "data/tekken3.bin",
-        cover: "covers/tekken3.jpg"
-    },
-    {
-        name: "Resident Evil",
-        file: "data/resident.bin",
-        cover: "covers/resident.jpg"
-    }
-];
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>SNES Emulator Browser</title>
+<style>
+  body {
+    background: #111;
+    color: white;
+    text-align: center;
+    font-family: Arial;
+  }
+  canvas {
+    border: 3px solid #444;
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
 
-const library = document.getElementById("library");
+<h1>🎮 SNES Emulator (Simples)</h1>
 
-games.forEach(game => {
-    const div = document.createElement("div");
-    div.className = "game";
+<input type="file" id="romInput" accept=".smc,.sfc"><br>
 
-    div.innerHTML = `
-        <img src="${game.cover}">
-        <p>${game.name}</p>
-    `;
+<canvas id="screen" width="256" height="224"></canvas>
 
-    div.onclick = () => loadGame(game.file);
+<script>
+// ⚠️ Isso é apenas um mock simplificado de emulação
 
-    library.appendChild(div);
-});
+let canvas = document.getElementById("screen");
+let ctx = canvas.getContext("2d");
 
-function loadGameFromFile(file) {
-    const reader = new FileReader();
+let romData = null;
+
+// Carregar ROM
+document.getElementById("romInput").addEventListener("change", function(e) {
+    let file = e.target.files[0];
+    let reader = new FileReader();
 
     reader.onload = function() {
-        document.getElementById("player").innerHTML = `<div id="game"></div>`;
-
-        window.EJS_player = "#game";
-        window.EJS_core = "psx";
-        window.EJS_biosUrl = "data/bios.bin";
-        window.EJS_gameUrl = new Uint8Array(this.result);
-        window.EJS_pathtodata = "https://www.emulatorjs.com/data/";
-
-        if (window.EJS_start) EJS_start();
+        romData = new Uint8Array(reader.result);
+        startEmulation();
     };
 
     reader.readAsArrayBuffer(file);
+});
+
+function startEmulation() {
+    alert("ROM carregada! (modo simulado)");
+
+    // Loop fake de renderização
+    setInterval(renderFrame, 16);
 }
+
+function renderFrame() {
+    if (!romData) return;
+
+    // Simulação visual (não é emulação real)
+    let img = ctx.createImageData(256, 224);
+
+    for (let i = 0; i < img.data.length; i += 4) {
+        let val = romData[i % romData.length];
+        img.data[i] = val;
+        img.data[i+1] = val * 0.5;
+        img.data[i+2] = 255 - val;
+        img.data[i+3] = 255;
+    }
+
+    ctx.putImageData(img, 0, 0);
+}
+</script>
+
+</body>
+</html>
