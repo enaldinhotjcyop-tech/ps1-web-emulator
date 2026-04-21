@@ -32,18 +32,20 @@ games.forEach(game => {
     library.appendChild(div);
 });
 
-function loadGame(gamePath) {
-    document.getElementById("player").innerHTML = `
-        <div id="game"></div>
-    `;
+function loadGameFromFile(file) {
+    const reader = new FileReader();
 
-    window.EJS_player = "#game";
-    window.EJS_core = "psx";
-    window.EJS_biosUrl = "data/bios.bin";
-    window.EJS_gameUrl = gamePath;
-    window.EJS_pathtodata = "https://www.emulatorjs.com/data/";
+    reader.onload = function() {
+        document.getElementById("player").innerHTML = `<div id="game"></div>`;
 
-    if (window.EJS_start) {
-        EJS_start();
-    }
+        window.EJS_player = "#game";
+        window.EJS_core = "psx";
+        window.EJS_biosUrl = "data/bios.bin";
+        window.EJS_gameUrl = new Uint8Array(this.result);
+        window.EJS_pathtodata = "https://www.emulatorjs.com/data/";
+
+        if (window.EJS_start) EJS_start();
+    };
+
+    reader.readAsArrayBuffer(file);
 }
